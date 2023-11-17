@@ -23,10 +23,10 @@ class CoBOState:
         bsz=10,
         acq_func='ts',
         verbose=True,
-        alpha=10.0, # Lip loss
-        beta = 1, # Surr loss
-        gamma = 1, # VAE loss
-        delta=1
+        lam_lip=100.0,
+        lam_surr=1,
+        lam_recon=1,
+        lam_z=0.1,
         ):
 
         self.objective          = objective         # objective with vae for particular task
@@ -41,10 +41,10 @@ class CoBOState:
         self.bsz                = bsz               # acquisition batch size
         self.acq_func           = acq_func          # acquisition function (Expected Improvement (ei) or Thompson Sampling (ts))
         self.verbose            = verbose
-        self.alpha              = alpha
-        self.beta               = beta
-        self.gamma              = gamma
-        self.delta              = delta
+        self.lam_lip              = lam_lip
+        self.lam_surr               = lam_surr
+        self.lam_recon              = lam_recon
+        self.lam_z              = lam_z
         assert acq_func in ["ei", "ts"]
         if minimize:
             self.train_y = self.train_y * -1
@@ -173,10 +173,10 @@ class CoBOState:
             self.num_update_epochs,
             track_with_wandb,
             tracker,
-            self.alpha,
-            self.beta,
-            self.gamma,
-            self.delta,
+            self.lam_lip,
+            self.lam_surr,
+            self.lam_recon,
+            self.lam_z,
         )
         self.tot_num_e2e_updates += 1
 

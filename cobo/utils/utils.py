@@ -30,10 +30,10 @@ def update_models_end_to_end(
     num_update_epochs,
     track_with_wandb,
     tracker,
-    alpha,
-    beta,
-    gamma,
-    delta
+    lam_lip,
+    lam_surr,
+    lam_recon,
+    lam_z
 ):
     '''Finetune VAE end to end with surrogate model
     This method is build to be compatible with the 
@@ -72,13 +72,13 @@ def update_models_end_to_end(
             recon_loss = recon_loss.mean([i for i in range(1, len(recon_loss.shape))])
             recon_loss = (recon_loss * recon_weight).mean()
             
-            vae_loss = recon_loss + 0.1 * kldiv      
+            vae_loss = lam_recon * recon_loss + 0.1 * kldiv      
             lip_loss, lips, dif_y, dif_z = lipschitz_loss(z, batch_y, recon_weight)
 
             dim = z.shape[-1]
             c = math.exp(math.lgamma((dim+1)/2) - math.lgamma(dim/2))*2
 
-            loss = alpha * lip_loss + beta * surr_loss + gamma * vae_loss + delta * (dif_z - c).abs()
+            loss = lam_lip * lip_loss + lam_surr * surr_loss + vae_loss + lam_z * (dif_z - c).abs()
 
             optimizer.zero_grad()
             loss.backward()

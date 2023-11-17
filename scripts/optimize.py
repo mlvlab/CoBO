@@ -46,7 +46,7 @@ class Optimize(object):
         wandb_entity: str="",
         wandb_project_name: str="",
         minimize: bool=False,
-        max_n_oracle_calls: int=200_000,
+        max_n_oracle_calls: int=70_000,
         learning_rte: float=0.001,
         acq_func: str="ts",
         bsz: int=10,
@@ -57,10 +57,10 @@ class Optimize(object):
         update_e2e: bool=True,
         k: int=1_000,
         verbose: bool=True,
-        alpha : float=10.0,
-        beta : int=1,
-        gamma : int=1,
-        delta : float=0.0,
+        lam_lip : float=100.0,
+        lam_surr : int=1,
+        lam_recon : int=1,
+        lam_z : float=0.1,
     ):
 
         self.method_args = {}
@@ -75,10 +75,10 @@ class Optimize(object):
         self.num_initialization_points = num_initialization_points
         self.e2e_freq = e2e_freq
         self.update_e2e = update_e2e 
-        self.alpha = alpha
-        self.beta = beta
-        self.gamma = gamma
-        self.delta = delta
+        self.lam_lip = lam_lip
+        self.lam_surr = lam_surr
+        self.lam_recon = lam_recon
+        self.lam_z = lam_z
         self.set_seed()
         if wandb_project_name:
             self.wandb_project_name = wandb_project_name
@@ -113,10 +113,10 @@ class Optimize(object):
             bsz=bsz,
             acq_func=acq_func,
             verbose=verbose,
-            alpha=alpha,
-            beta=beta,
-            gamma=gamma,
-            delta=delta,
+            lam_lip=lam_lip,
+            lam_surr=lam_surr,
+            lam_recon=lam_recon,
+            lam_z=lam_z,
         )
 
     def initialize_objective(self):
