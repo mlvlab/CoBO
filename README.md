@@ -10,7 +10,7 @@ We provide setup script file and environment file.
 To setup the project, you can use the provided YAML file by running the following command:
 
 ```
-conda env create -f cobo_env.yml
+conda env create -f requirements.yml
 ```
 
 
