@@ -2,7 +2,7 @@
 Official PyTorch Implementation for Advancing Bayesian Optimization via Learning Correlated Latent Space (CoBO) ([arxiv](https://arxiv.org/pdf/2310.20258.pdf)).
 > Seunghun Lee*, Jaewon Chu*, Sihyeon Kim*, Juyeon Ko, Hyunwoo J. Kim, In Advanced in Neural Information Processing Systems (NeurIPS 2023).
 
-<img src="https://github.com/llsshh319/CoBO/assets/29230924/d97684be-6254-47a9-8a95-5a012e0a6ca1" width="80%" height="80%">
+<img src="https://github.com/mlvlab/CoBO/assets/29230924/6cffa825-4c02-4f08-acd2-31e546c4458d" width="80%" height="80%">
 
 ## Setup
 We provide setup script file and environment file.
