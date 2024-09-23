@@ -2,7 +2,6 @@ wandb/
 wandb/*
 __pycache__/
 __pycache__/*
-*.ipynb
 *.ckpt
 *.pt
 !SELFIES-VAE-state-dict.pt
