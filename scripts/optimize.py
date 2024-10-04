@@ -213,8 +213,8 @@ class Optimize(object):
                 #     disty = np.abs(diffy).reshape(-1)
                     
                 #     corr = get_correlation(disty, distz)
-                    
-                #     self.tracker.log({"corr":corr})
+                #     if self.tracker is not None:
+                #         self.tracker.log({"corr":corr})
                 # ########################################################
                 
                 self.cobo_state.update_models_e2e(self.track_with_wandb, self.tracker)
