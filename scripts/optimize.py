@@ -192,50 +192,49 @@ class Optimize(object):
         ''' Main optimization loop
         '''
         self.create_wandb_tracker()
+        
+        step = 0
         while self.cobo_state.objective.num_calls < self.max_n_oracle_calls:
             self.log_data_to_wandb_on_each_loop()
             if (self.cobo_state.progress_fails_since_last_e2e >= self.e2e_freq) and self.update_e2e:
                 
-                ########################################################
-                # correlation analysis
-                from scipy.stats import pearsonr
-                def get_correlation(x,y):
-                    return pearsonr(x, y)[0]
-                with torch.no_grad():
-                    z = self.lolbo_state.objective.vae_forward(self.lolbo_state.top_k_xs)[0].detach().cpu()
-                    y = np.array(self.lolbo_state.top_k_scores)
+                # ########################################################
+                # # correlation analysis
+                # from scipy.stats import pearsonr
+                # def get_correlation(x,y):
+                #     return pearsonr(x, y)[0]
+                # with torch.no_grad():
+                #     z = self.cobo_state.objective.vae_forward(self.cobo_state.top_k_xs)[0].detach().cpu()
+                #     y = np.array(self.cobo_state.top_k_scores)
                     
-                    diffz = z - z[:,None]
-                    diffy = y - y[:,None]
-                    distz = torch.norm(diffz, p=2, dim=-1).reshape(-1).detach().cpu().numpy()
-                    disty = np.abs(diffy).reshape(-1)
+                #     diffz = z - z[:,None]
+                #     diffy = y - y[:,None]
+                #     distz = torch.norm(diffz, p=2, dim=-1).reshape(-1).detach().cpu().numpy()
+                #     disty = np.abs(diffy).reshape(-1)
                     
-                    corr = get_correlation(disty, distz)
+                #     corr = get_correlation(disty, distz)
                     
-                    self.tracker.log({"corr":corr})
-                ########################################################
-                
-                
-                
+                #     self.tracker.log({"corr":corr})
+                # ########################################################
                 
                 self.cobo_state.update_models_e2e(self.track_with_wandb, self.tracker)
                 self.cobo_state.recenter()
                 
                 ########################################################
-                # smoothness analysis
-                save_path = f"./analysis_data"
+                # # smoothness analysis
+                # save_path = f"./analysis_data"
                 
-                if step % 10==0:
-                    state = self.lolbo_state
-                    with torch.no_grad():
-                        topx = self.lolbo_state.top_k_xs
-                        topz = state.objective.vae_forward(topx)[0]
-                        topy = self.lolbo_state.top_k_scores
+                # if step % 10==0:
+                #     state = self.cobo_state
+                #     with torch.no_grad():
+                #         topx = self.cobo_state.top_k_xs
+                #         topz = state.objective.vae_forward(topx)[0]
+                #         topy = self.cobo_state.top_k_scores
                         
-                    np.save(f"{save_path}/top_x_all_{self.lam_lip}_{step}.npy", topx)
-                    np.save(f"{save_path}/top_z_all_{self.lam_lip}_{step}.npy", topz.detach().cpu())
-                    np.save(f"{save_path}/top_y_all_{self.lam_lip}_{step}.npy", topy)
-                step+=1
+                #     np.save(f"{save_path}/top_x_all_{self.lam_lip}_{step}.npy", topx)
+                #     np.save(f"{save_path}/top_z_all_{self.lam_lip}_{step}.npy", topz.detach().cpu())
+                #     np.save(f"{save_path}/top_y_all_{self.lam_lip}_{step}.npy", topy)
+                # step+=1
                 ########################################################
                 
             else: 

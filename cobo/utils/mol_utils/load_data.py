@@ -47,7 +47,7 @@ def compute_train_zs(
     n_batches = math.ceil(len(init_train_x)/bsz)
     for i in range(n_batches):
         xs_batch = init_train_x[i*bsz:(i+1)*bsz] 
-        zs, _, _, _, _ = mol_objective.vae_forward(xs_batch)
+        zs, _, _, _= mol_objective.vae_forward(xs_batch)
         init_zs.append(zs.detach().cpu())
     init_zs = torch.cat(init_zs, dim=0)
     state_dict_file_type = mol_objective.path_to_vae_statedict.split('.')[-1] 
